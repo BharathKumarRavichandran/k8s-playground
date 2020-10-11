@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-playground-server-service # DNS name
+spec:
+  type: LoadBalancer
+  selector:
+    app: k8s-playground
+    tier: server
+  ports:
+    - protocol: TCP
+      port: 8081 # service listens to this port
+      targetPort: 8000 # service forwards requests to this
+  env:
+    - name: DB_HOST
+      value: k8s-playground-database-service

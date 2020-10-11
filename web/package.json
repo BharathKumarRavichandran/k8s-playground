@@ -1,0 +1,32 @@
+{
+  "name": "k8s-playground-frontend",
+  "version": "1.0.0",
+  "description": "Simple illustration frontend",
+  "main": "server.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "nodemon server.js",
+    "test": "mocha --exit --timeout 10000",
+    "docker": "sh app_entry.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BharathKumarRavichandran/k8s-playground.git"
+  },
+  "keywords": [
+    "kubernetes",
+    "k8s"
+  ],
+  "author": "Bharath Kumar Ravichandran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BharathKumarRavichandran/k8s-playground/issues"
+  },
+  "homepage": "https://github.com/BharathKumarRavichandran/k8s-playground#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

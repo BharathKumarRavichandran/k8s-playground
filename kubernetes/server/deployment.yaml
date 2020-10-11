@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-playground-server-deployment
+  labels:
+    app: k8s-playground
+    tier: server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-playground
+      tier: server
+  template:
+    metadata:
+      labels:
+        app: k8s-playground
+        tier: server
+    spec:
+      containers:
+      - name: k8s-playground-server
+        image: bharathkumarravichandran/k8s-playground-server:1.0.0
+        resources:
+          requests:
+            cpu: "100m" # 100milliCPU / 0.1vCPU/Core
+            memory: "256Mi"
+          limits:
+            cpu: "300m"
+            memory: "512Mi"
+        ports:
+        - containerPort: 8000
+          name: http

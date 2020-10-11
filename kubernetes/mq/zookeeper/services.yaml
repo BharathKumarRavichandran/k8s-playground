@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk-hs
+  labels:
+    app: k8s-playground
+    tier: mq
+    name: zk
+spec:
+  ports:
+  - port: 2888
+    name: server
+  - port: 3888
+    name: leader-election
+  clusterIP: None
+  selector:
+    app: k8s-playground
+    tier: mq
+    name: zk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk-cs
+  labels:
+    app: k8s-playground
+    tier: mq
+    name: zk
+spec:
+  ports:
+  - port: 2181
+    name: client
+  selector:
+    app: k8s-playground
+    tier: mq
+    name: zk

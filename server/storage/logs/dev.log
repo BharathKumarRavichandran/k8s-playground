@@ -1,0 +1,3 @@
+{"level":"info","msg":"Logger started","time":"2020-10-11T15:50:55+05:30"}
+{"level":"fatal","msg":"gocql: unable to create session: unable to discover protocol version: dial tcp [::1]:9042: connect: connection refused","time":"2020-10-11T15:50:55+05:30"}
++05:30"}

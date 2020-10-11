@@ -1,0 +1,50 @@
+{
+    "Dev": {
+        "STAGE": "dev",
+        "DEBUG": true,
+        "HOST": "localhost",
+        "PORT": "8000",
+        "ServerPort": ":8000",
+        "DB_HOST": "localhost",
+        "DB_PORT": 9042,
+        "DB_KEYSPACE": "playground",
+        "DB_USERNAME": "",
+        "DB_PASSWORD": "",
+        "LogDir": "storage/logs/",
+        "LogFileName": "dev.log",
+        "LogMaxSize": 50,
+        "LogLevel": "info"
+    },
+    "Test": {
+        "STAGE": "test",
+        "DEBUG": true,
+        "HOST": "localhost",
+        "PORT": "8000",
+        "ServerPort": ":8000",
+        "DB_HOST": "localhost",
+        "DB_PORT": 9042,
+        "DB_KEYSPACE": "playground",
+        "DB_USERNAME": "",
+        "DB_PASSWORD": "",
+        "LogDir": "storage/logs/",
+        "LogFileName": "test.log",
+        "LogMaxSize": 50,
+        "LogLevel": "info"
+    },
+    "Prod": {
+        "STAGE": "prod",
+        "DEBUG": false,
+        "HOST": "k8s-playground-cassandra-service",
+        "PORT": "8000",
+        "ServerPort": ":8000",
+        "DB_HOST": "localhost",
+        "DB_PORT": 9042,
+        "DB_KEYSPACE": "playground",
+        "DB_USERNAME": "",
+        "DB_PASSWORD": "",
+        "LogDir": "storage/logs/",
+        "LogFileName": "prod.log",
+        "LogMaxSize": 50,
+        "LogLevel": "info"
+    }
+}
