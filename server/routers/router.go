@@ -16,7 +16,7 @@ func Routes(router *gin.Engine) {
 	record := router.Group("/record")
 	record.Use()
 	{
-		record.GET("/:id", recordController.GetRecord)
+		record.GET("/id/:id", recordController.GetRecord)
 		record.GET("/all", recordController.GetAllRecords)
 
 		record.POST("/push", recordController.PushRecord)

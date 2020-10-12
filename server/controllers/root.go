@@ -14,7 +14,7 @@ type RootController struct{}
 
 func (ctrl RootController) PongController(c *gin.Context) {
 
-	responseMessage := "What are ya doing here?"
+	responseMessage := "What are you doing here?"
 	utils.Logger.Infof("%s", responseMessage)
 	c.JSON(http.StatusOK, gin.H{
 		"status_code": http.StatusOK,

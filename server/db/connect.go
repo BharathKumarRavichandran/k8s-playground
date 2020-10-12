@@ -8,7 +8,15 @@ import (
 
 var Session *gocql.Session
 
-func Open(config *utils.Config) error {
+func Init(config *utils.Config) {
+	// Connect to database
+	if err := open(config); err != nil {
+		panic("Could not connect to database")
+	}
+	defer close()
+}
+
+func open(config *utils.Config) error {
 
 	var err error
 
@@ -29,7 +37,7 @@ func Open(config *utils.Config) error {
 	return err
 }
 
-func Close() {
+func close() {
 	utils.Logger.Error("Database connection closed")
 	Session.Close()
 }

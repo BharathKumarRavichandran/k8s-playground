@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/BharathKumarRavichandran/k8s-playground/server/db"
 	"github.com/BharathKumarRavichandran/k8s-playground/server/utils"
+	"github.com/BharathKumarRavichandran/k8s-playground/server/utils/kafka"
 	"github.com/joho/godotenv"
 
 	indexRouter "github.com/BharathKumarRavichandran/k8s-playground/server/routers"
@@ -10,18 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func initDB(config *utils.Config) {
-	// Connect to database
-	if err := db.Open(config); err != nil {
-		panic("Could not connect to database")
-	}
-	defer db.Close()
-}
-
 func RealMain() {
 	config := utils.GetConfiguration()
 	utils.Init(config)
-	//initDB(config)
+	db.Init(config)
+	kafka.Init(config)
 
 	// Read env file
 	err := godotenv.Load()

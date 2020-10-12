@@ -30,6 +30,15 @@ type Config struct {
 	// DB_PASSWORD is the password of the database user
 	DB_PASSWORD string
 
+	// KAFKA_SERVICE_NAME is the list of bootstrap servers / brokers
+	KAFKA_SERVICE_NAME string
+	// KAFKA_CONSUMER_GROUP is the consumer group that this app is part of
+	KAFKA_CONSUMER_GROUP string
+	// KAFKA_TOPIC is the topic that the app uses to push/read records
+	KAFKA_TOPIC    string
+	KAFKA_USERNAME string
+	KAFKA_PASSWORD string
+
 	// Logging related options
 	// LogDir is the path of the log directory
 	LogDir string
@@ -60,19 +69,24 @@ var allConfigurations = struct {
 // config.json won't get loaded correctly unless specified by flags
 // that gets painful when running individual tests
 var config = &Config{
-	STAGE:       "test",
-	HOST:        "localhost",
-	PORT:        "8000",
-	ServerPort:  ":8000",
-	DB_HOST:     "localhost",
-	DB_PORT:     9042,
-	DB_KEYSPACE:     "k8s_playground",
-	DB_USERNAME: "root",
-	DB_PASSWORD: "",
-	LogDir:      "storage/logs/",
-	LogFileName: "stdout",
-	LogMaxSize:  50,
-	LogLevel:    "debug",
+	STAGE:                "test",
+	HOST:                 "localhost",
+	PORT:                 "8000",
+	ServerPort:           ":8000",
+	DB_HOST:              "localhost",
+	DB_PORT:              9042,
+	DB_KEYSPACE:          "k8s_playground",
+	DB_USERNAME:          "root",
+	DB_PASSWORD:          "",
+	KAFKA_SERVICE_NAME:   "",
+	KAFKA_CONSUMER_GROUP: "",
+	KAFKA_TOPIC:          "",
+	KAFKA_USERNAME:       "",
+	KAFKA_PASSWORD:       "",
+	LogDir:               "storage/logs/",
+	LogFileName:          "stdout",
+	LogMaxSize:           50,
+	LogLevel:             "debug",
 }
 
 var configFileName *string

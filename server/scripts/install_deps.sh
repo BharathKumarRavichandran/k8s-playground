@@ -5,3 +5,4 @@ go get -v github.com/joho/godotenv
 go get -v github.com/sirupsen/logrus
 go get -v github.com/google/uuid
 go get -v github.com/gocql/gocql
+go get -v gopkg.in/confluentinc/confluent-kafka-go.v1/kafka
