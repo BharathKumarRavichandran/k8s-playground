@@ -14,7 +14,10 @@ import (
 func RealMain() {
 	config := utils.GetConfiguration()
 	utils.Init(config)
+
 	db.Init(config)
+	defer db.Close()
+
 	kafka.Init(config)
 
 	// Read env file

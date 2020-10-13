@@ -50,7 +50,6 @@ func ProduceMessage(message string) {
 		utils.Logger.Errorf("Failed to push message: %s\n", err)
 	}
 
-	fmt.Println("asd1")
 	e := <-deliveryChan
 	m := e.(*kafka.Message)
 

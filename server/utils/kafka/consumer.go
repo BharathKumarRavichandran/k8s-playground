@@ -5,8 +5,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
+	"github.com/BharathKumarRavichandran/k8s-playground/server/db"
 	"github.com/BharathKumarRavichandran/k8s-playground/server/utils"
+	"github.com/gocql/gocql"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
@@ -65,7 +68,14 @@ func initConsumer(kafkaConfig KafkaConfig) {
 
 				switch e := ev.(type) {
 				case *kafka.Message:
-					// TODO: Push Message to database
+
+					// Push Message to database
+					message := string(e.Value)
+					if err := db.Session.Query(`INSERT INTO records (id, message, created_date) VALUES (?, ?, ?)`,
+						gocql.TimeUUID(), message, time.Now()).Exec(); err != nil { // can also use gocql.RandomUUID()
+						utils.Logger.Error(err)
+					}
+
 					utils.Logger.Infof("%% Message on %s:\n%s\n",
 						e.TopicPartition, string(e.Value))
 					if e.Headers != nil {

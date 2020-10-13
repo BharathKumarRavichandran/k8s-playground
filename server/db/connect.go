@@ -13,7 +13,6 @@ func Init(config *utils.Config) {
 	if err := open(config); err != nil {
 		panic("Could not connect to database")
 	}
-	defer close()
 }
 
 func open(config *utils.Config) error {
@@ -23,7 +22,7 @@ func open(config *utils.Config) error {
 	cluster := gocql.NewCluster(config.DB_HOST)
 	cluster.Port = config.DB_PORT
 	cluster.Keyspace = config.DB_KEYSPACE
-	cluster.Consistency = gocql.Quorum
+	cluster.Consistency = gocql.Quorum // Use gocql.All if you want to achieve strong consistency (W->All nodes)
 	cluster.Authenticator = gocql.PasswordAuthenticator{Username: config.DB_USERNAME, Password: config.DB_PASSWORD}
 
 	Session, err = cluster.CreateSession()
@@ -37,7 +36,7 @@ func open(config *utils.Config) error {
 	return err
 }
 
-func close() {
+func Close() {
 	utils.Logger.Error("Database connection closed")
 	Session.Close()
 }

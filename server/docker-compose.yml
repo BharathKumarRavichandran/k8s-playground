@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  playground_server:
+    container_name: k8s_playground_server
+    build: .
+    restart: always
+    volumes: 
+        - $GOPATH:/go
+        - ./:/go/src/github.com/BharathKumarRavichandran/k8s-playground
+    ports:
+        - '8000:8000'
+    depends_on:
+        - playground_db
+    env_file:
+        - .env
+
+  playground_db:
+    image: 'cassandra:3.11.2'
+    container_name: k8s_playground_cassandra
+    restart: always
+    ports:
+      - '7000:7000'
+      - '9042:9042'
+    volumes:
+      - './migrations/0_schema.cql:/var/lib/cassandra/0_schema.cql'
+      - 'cassandra_data:/var/lib/cassandra'
+    env_file:
+      - .env
+    environment:
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_USER=${DB_USERNAME}
+      - CASSANDRA_PASSWORD=${DB_PASSWORD}
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+
+volumes:
+  cassandra_data:
+    driver: local
