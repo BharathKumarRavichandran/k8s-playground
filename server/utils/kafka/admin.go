@@ -10,16 +10,17 @@ import (
 
 func CreateTopic(topic string) {
 
-	brokers := kafkaConfig.serviceName
+	kafkaConfig := utils.GetConfiguration().Kafka
 
 	adminClient, err := kafka.NewAdminClient(&kafka.ConfigMap{
-		"bootstrap.servers":       brokers,
+		"bootstrap.servers":       kafkaConfig.ServiceName,
 		"broker.version.fallback": "0.10.0.0",
 		"api.version.fallback.ms": 0,
-		"sasl.mechanisms":         "PLAIN",
-		"security.protocol":       "SASL_SSL",
-		"sasl.username":           "",
-		"sasl.password":           ""})
+		"sasl.mechanisms":         kafkaConfig.SaslMechanisms,
+		"security.protocol":       kafkaConfig.SecurityProtocol,
+		"sasl.username":           kafkaConfig.Username,
+		"sasl.password":           kafkaConfig.Password,
+	})
 
 	if err != nil {
 		utils.Logger.Fatalf("Failed to create Admin client: %s\n", err)
@@ -54,7 +55,6 @@ func CreateTopic(topic string) {
 			result.Error.Code() != kafka.ErrTopicAlreadyExists {
 			utils.Logger.Errorf("Topic creation failed for %s: %v",
 				result.Topic, result.Error.String())
-			//os.Exit(1)
 		}
 	}
 

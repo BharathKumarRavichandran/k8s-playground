@@ -1,26 +1,21 @@
 package kafka
 
 import (
-	"fmt"
-
 	"github.com/BharathKumarRavichandran/k8s-playground/server/utils"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
 var producer *kafka.Producer
 
-func initProducer(kafkaConfig KafkaConfig) {
-
-	brokers := kafkaConfig.serviceName
+func initProducer(kafkaConfig utils.KafkaConfig) {
 
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": brokers,
-		// Enable the Idempotent Producer
-		"enable.idempotence": true,
-		"sasl.mechanisms":    "SCRAM-SHA-256",
-		"security.protocol":  "SASL_SSL",
-		"sasl.username":      kafkaConfig.username,
-		"sasl.password":      kafkaConfig.password,
+		"bootstrap.servers":  kafkaConfig.ServiceName,
+		"enable.idempotence": true, // Enable the Idempotent Producer
+		"sasl.mechanisms":    kafkaConfig.SaslMechanisms,
+		"security.protocol":  kafkaConfig.SecurityProtocol,
+		"sasl.username":      kafkaConfig.Username,
+		"sasl.password":      kafkaConfig.Password,
 	})
 
 	producer = p
@@ -35,7 +30,7 @@ func initProducer(kafkaConfig KafkaConfig) {
 func ProduceMessage(message string) {
 	// Optional delivery channel, if not specified the Producer object's
 	// .Events channel is used.
-	topic := kafkaConfig.topic
+	topic := utils.GetConfiguration().Kafka.Topic
 	deliveryChan := make(chan kafka.Event)
 
 	utils.Logger.Infof("Pushing message: %s", message)
@@ -60,7 +55,7 @@ func ProduceMessage(message string) {
 			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
 	}
 
-	fmt.Println("Closing delivery channel...")
+	utils.Logger.Info("Closing Kafka-Producer delivery channel...")
 	close(deliveryChan)
 }
 

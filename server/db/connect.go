@@ -18,12 +18,13 @@ func Init(config *utils.Config) {
 func open(config *utils.Config) error {
 
 	var err error
+	var dbConfig = config.Db
 
-	cluster := gocql.NewCluster(config.DB_HOST)
-	cluster.Port = config.DB_PORT
-	cluster.Keyspace = config.DB_KEYSPACE
+	cluster := gocql.NewCluster(dbConfig.Host)
+	cluster.Port = dbConfig.Port
+	cluster.Keyspace = dbConfig.Keyspace
 	cluster.Consistency = gocql.Quorum // Use gocql.All if you want to achieve strong consistency (W->All nodes)
-	cluster.Authenticator = gocql.PasswordAuthenticator{Username: config.DB_USERNAME, Password: config.DB_PASSWORD}
+	cluster.Authenticator = gocql.PasswordAuthenticator{Username: dbConfig.User, Password: dbConfig.Password}
 
 	Session, err = cluster.CreateSession()
 	if err != nil {
@@ -32,7 +33,7 @@ func open(config *utils.Config) error {
 	}
 	utils.Logger.Info("Cassandra init done")
 
-	utils.Logger.Infof("Database connection successful to %s:%d", config.DB_HOST, config.DB_PORT)
+	utils.Logger.Infof("Database connection successful to %s:%d", dbConfig.Host, dbConfig.Port)
 	return err
 }
 

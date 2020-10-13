@@ -7,6 +7,36 @@ import (
 	"os"
 )
 
+// Database related options
+type DbConfig struct {
+	// Host is the host name of the database server
+	Host string
+	// Port is the port of the database server
+	Port int
+	// Name is the name of the database server
+	Name string
+	// Keyspace is the keyspace of the database
+	Keyspace string
+	// User is the name of the database user
+	User string
+	// Password is the password of the database user
+	Password string
+}
+
+// Apache Kafka related options
+type KafkaConfig struct {
+	// ServiceName is the list of bootstrap servers / brokers
+	ServiceName      string
+	SaslMechanisms   string
+	SecurityProtocol string
+	// ConsumerGroup is the consumer group that this app is part of
+	ConsumerGroup string
+	// TOPIC is the topic that the app uses to push/read records
+	Topic    string
+	Username string
+	Password string
+}
+
 // Config contains all the configuration options
 type Config struct {
 	// Environment related options
@@ -19,25 +49,10 @@ type Config struct {
 	ServerPort string
 
 	// Database related options
-	// DB_HOST is the host name of the database server
-	DB_HOST string
-	// DB_PORT is the port of the database server
-	DB_PORT int
-	// DB_KEYSPACE is the name of the database
-	DB_KEYSPACE string
-	// DB_USERNAME is the name of the database user
-	DB_USERNAME string
-	// DB_PASSWORD is the password of the database user
-	DB_PASSWORD string
+	Db DbConfig
 
-	// KAFKA_SERVICE_NAME is the list of bootstrap servers / brokers
-	KAFKA_SERVICE_NAME string
-	// KAFKA_CONSUMER_GROUP is the consumer group that this app is part of
-	KAFKA_CONSUMER_GROUP string
-	// KAFKA_TOPIC is the topic that the app uses to push/read records
-	KAFKA_TOPIC    string
-	KAFKA_USERNAME string
-	KAFKA_PASSWORD string
+	// Apache Kafka related options
+	Kafka KafkaConfig
 
 	// Logging related options
 	// LogDir is the path of the log directory
@@ -69,24 +84,31 @@ var allConfigurations = struct {
 // config.json won't get loaded correctly unless specified by flags
 // that gets painful when running individual tests
 var config = &Config{
-	STAGE:                "test",
-	HOST:                 "localhost",
-	PORT:                 "8000",
-	ServerPort:           ":8000",
-	DB_HOST:              "localhost",
-	DB_PORT:              9042,
-	DB_KEYSPACE:          "k8s_playground",
-	DB_USERNAME:          "root",
-	DB_PASSWORD:          "",
-	KAFKA_SERVICE_NAME:   "",
-	KAFKA_CONSUMER_GROUP: "",
-	KAFKA_TOPIC:          "",
-	KAFKA_USERNAME:       "",
-	KAFKA_PASSWORD:       "",
-	LogDir:               "storage/logs/",
-	LogFileName:          "stdout",
-	LogMaxSize:           50,
-	LogLevel:             "debug",
+	STAGE:      "test",
+	HOST:       "localhost",
+	PORT:       "8000",
+	ServerPort: ":8000",
+	Db: DbConfig{
+		Host:     "localhost",
+		Port:     9042,
+		Name:     "k8s_playground",
+		Keyspace: "k8s_playground",
+		User:     "cassandra",
+		Password: "cassandra",
+	},
+	Kafka: KafkaConfig{
+		ServiceName:      "",
+		SaslMechanisms:   "",
+		SecurityProtocol: "",
+		ConsumerGroup:    "",
+		Topic:            "",
+		Username:         "",
+		Password:         "",
+	},
+	LogDir:      "storage/logs/",
+	LogFileName: "stdout",
+	LogMaxSize:  50,
+	LogLevel:    "debug",
 }
 
 var configFileName *string

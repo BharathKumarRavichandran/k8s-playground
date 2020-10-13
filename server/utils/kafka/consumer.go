@@ -13,30 +13,23 @@ import (
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
-func initConsumer(kafkaConfig KafkaConfig) {
+func initConsumer(kafkaConfig utils.KafkaConfig) {
 
-	brokers := kafkaConfig.serviceName
-	group := kafkaConfig.consumerGroup
-	topics := []string{kafkaConfig.topic}
+	topics := []string{kafkaConfig.Topic}
 
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": brokers,
-		// Avoid connecting to IPv6 brokers:
-		// This is needed for the ErrAllBrokersDown show-case below
-		// when using localhost brokers on OSX, since the OSX resolver
-		// will return the IPv6 addresses first.
-		// You typically don't need to specify this configuration property.
+		"bootstrap.servers":     kafkaConfig.ServiceName,
 		"broker.address.family": "v4",
-		"group.id":              group,
+		"group.id":              kafkaConfig.ConsumerGroup,
 		"session.timeout.ms":    6000,
 		"auto.offset.reset":     "earliest",
-		"sasl.mechanisms":       "SCRAM-SHA-256",
-		"security.protocol":     "SASL_SSL",
-		"sasl.username":         kafkaConfig.username,
-		"sasl.password":         kafkaConfig.password,
+		"sasl.mechanisms":       kafkaConfig.SaslMechanisms,
+		"security.protocol":     kafkaConfig.SecurityProtocol,
+		"sasl.username":         kafkaConfig.Username,
+		"sasl.password":         kafkaConfig.Password,
 	})
 
 	if err != nil {
@@ -85,7 +78,7 @@ func initConsumer(kafkaConfig KafkaConfig) {
 					// Errors should generally be considered
 					// informational, the client will try to
 					// automatically recover.
-					// But in this example we choose to terminate
+					// Here we choose to terminate
 					// the application if all brokers are down.
 					//fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
 					if e.Code() == kafka.ErrAllBrokersDown {
